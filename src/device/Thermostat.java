@@ -1,5 +1,4 @@
-import device.Protocol;
-import device.SmartDevice;
+package device;
 
 public class Thermostat extends SmartDevice {
     private int temperature;

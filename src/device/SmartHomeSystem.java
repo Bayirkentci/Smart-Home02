@@ -1,29 +1,24 @@
 package device;
 
 import java.util.*;
+import exceptions.*;
 
 public class SmartHomeSystem {
     private Map<String, SmartDevice> devices = new LinkedHashMap<>();
 
     public String addDevice(String type, String name, String protocolStr) {
         if (devices.containsKey(name)) {
-            return "duplicate device name";
+            throw new DuplicateElementException("duplicate device name");
         }
 
         Protocol protocol = Protocol.fromString(protocolStr);
-        if (protocol == null) return "invalid input";
+        if (protocol == null) throw new InvalidException("invalid input");
 
-        SmartDevice device = null;
-        switch (type.toLowerCase()) {
-            case "light":
-                device = new Light(name, protocol);
-                break;
-            case "thermostat":
-                device = new Thermostat(name, protocol);
-                break;
-            default:
-                return "invalid input";
-        }
+        SmartDevice device = switch (type.toLowerCase()) {
+            case "light" -> new Light(name, protocol);
+            case "thermostat" -> new Thermostat(name, protocol);
+            default -> throw new InvalidException("invalid input");
+        };
 
         devices.put(name, device);
         return "device added successfully";
@@ -31,7 +26,7 @@ public class SmartHomeSystem {
 
     public String setDevice(String name, String property, String value) {
         SmartDevice device = devices.get(name);
-        if (device == null) return "device not found";
+        if (device == null) throw new DeviceNotFoundException();
         return device.setProperty(property, value);
     }
 

@@ -14,57 +14,61 @@ public class Main {
             String command = parts[0];
             String result = "";
 
-            switch (command) {
-                case "add_device":
-                    if (parts.length != 4) {
+            try {
+                switch (command) {
+                    case "add_device":
+                        if (parts.length != 4) {
+                            result = "invalid input";
+                        } else {
+                            result = system.addDevice(parts[1], parts[2], parts[3]);
+                        }
+                        break;
+
+                    case "set_device":
+                        if (parts.length != 4) {
+                            result = "invalid input";
+                        } else {
+                            result = system.setDevice(parts[1], parts[2], parts[3]);
+                        }
+                        break;
+
+                    case "remove_device":
+                        if (parts.length != 2) {
+                            result = "invalid input";
+                        } else {
+                            result = system.removeDevice(parts[1]);
+                        }
+                        break;
+
+                    case "list_devices":
+                        result = system.listDevices();
+                        break;
+
+                    case "add_rule":
+                        if (parts.length != 4) {
+                            result = "invalid input";
+                        } else {
+                            result = system.addRule(parts[1], parts[2], parts[3]);
+                        }
+                        break;
+
+                    case "check_rules":
+                        if (parts.length != 2) {
+                            result = "invalid input";
+                        } else {
+                            result = system.checkRules(parts[1]);
+                        }
+                        break;
+
+                    case "list_rules":
+                        result = system.listRules();
+                        break;
+
+                    default:
                         result = "invalid input";
-                    } else {
-                        result = system.addDevice(parts[1], parts[2], parts[3]);
-                    }
-                    break;
-
-                case "set_device":
-                    if (parts.length != 4) {
-                        result = "invalid input";
-                    } else {
-                        result = system.setDevice(parts[1], parts[2], parts[3]);
-                    }
-                    break;
-
-                case "remove_device":
-                    if (parts.length != 2) {
-                        result = "invalid input";
-                    } else {
-                        result = system.removeDevice(parts[1]);
-                    }
-                    break;
-
-                case "list_devices":
-                    result = system.listDevices();
-                    break;
-
-                case "add_rule":
-                    if (parts.length != 4) {
-                        result = "invalid input";
-                    } else {
-                        result = system.addRule(parts[1], parts[2], parts[3]);
-                    }
-                    break;
-
-                case "check_rules":
-                    if (parts.length != 2) {
-                        result = "invalid input";
-                    } else {
-                        result = system.checkRules(parts[1]);
-                    }
-                    break;
-
-                case "list_rules":
-                    result = system.listRules();
-                    break;
-
-                default:
-                    result = "invalid input";
+                }
+            } catch (RuntimeException e) {
+                result = e.getMessage();
             }
 
             System.out.println(result);
