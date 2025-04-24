@@ -56,4 +56,63 @@ public class SmartHomeSystem {
     private void removeRulesByDevice(String name) {
         rules.remove(name);
     }
+
+    public String addRule(String name, String time, String action) {
+        if (!devices.containsKey(name))
+            return "device not found";
+
+        if (!isValidTimeFormat(time))
+            return "invalid time";
+
+        if (!action.equalsIgnoreCase("on") && !action.equalsIgnoreCase("off"))
+            return "invalid action";
+
+        rules.putIfAbsent(name, new ArrayList<>());
+
+        for (Rule rule : rules.get(name)) {
+            if (rule.getTime().equals(time))
+                return "duplicate rule";
+        }
+
+        rules.get(name).add(new Rule(name, time, action));
+        return "rule added successfully";
+    }
+
+    public String checkRules(String time) {
+        if (!isValidTimeFormat(time))
+            return "invalid time";
+
+        for (String deviceName : rules.keySet()) {
+            for (Rule rule : rules.get(deviceName)) {
+                if (rule.getTime().equals(time)) {
+                    SmartDevice device = devices.get(deviceName);
+                    if (device != null) {
+                        if (rule.getAction().equals("on"))
+                            device.turnOn();
+                        else
+                            device.turnOff();
+                    }
+                }
+            }
+        }
+        return "rules checked";
+    }
+
+    public String listRules() {
+        StringBuilder sb = new StringBuilder();
+        for (List<Rule> ruleList : rules.values()) {
+            for (Rule rule : ruleList) {
+                sb.append(rule.toString()).append("\n");
+            }
+        }
+        return sb.toString().trim();
+    }
+
+    private boolean isValidTimeFormat(String time) {
+        if (!time.matches("\\d{2}:\\d{2}")) return false;
+        String[] parts = time.split(":");
+        int hour = Integer.parseInt(parts[0]);
+        int min = Integer.parseInt(parts[1]);
+        return hour >= 0 && hour <= 23 && min >= 0 && min <= 59;
+    }
 }
