@@ -1,3 +1,4 @@
+import device.Protocol;
 import device.SmartDevice;
 
 public class Thermostat extends SmartDevice {
