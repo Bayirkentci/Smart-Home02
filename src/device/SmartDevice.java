@@ -1,9 +1,8 @@
 package device;
-
 public abstract class SmartDevice {
     protected String name;
-    protected Protocol protocol;
     protected boolean isOn;
+    protected Protocol protocol;
 
     public SmartDevice(String name, Protocol protocol) {
         this.name = name;
@@ -11,17 +10,7 @@ public abstract class SmartDevice {
         this.isOn = false;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Protocol getProtocol() {
-        return protocol;
-    }
-
-    public boolean isOn() {
-        return isOn;
-    }
+    public abstract String setProperty(String property, String value);
 
     public void turnOn() {
         this.isOn = true;
@@ -31,8 +20,15 @@ public abstract class SmartDevice {
         this.isOn = false;
     }
 
-    public abstract String setProperty(String property, String value);
+    public String getName() {
+        return name;
+    }
 
-    @Override
-    public abstract String toString();
+    public boolean isOn() {
+        return isOn;
+    }
+
+    public Protocol getProtocol() {
+        return protocol;
+    }
 }

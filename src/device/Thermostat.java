@@ -1,4 +1,5 @@
 package device;
+import exceptions.*;
 
 public class Thermostat extends SmartDevice {
     private int temperature;
@@ -10,33 +11,29 @@ public class Thermostat extends SmartDevice {
 
     @Override
     public String setProperty(String property, String value) {
-        if (property.equalsIgnoreCase("status")) {
-            if (value.equalsIgnoreCase("on")) {
-                turnOn();
-                return "device updated successfully";
-            } else if (value.equalsIgnoreCase("off")) {
-                turnOff();
-                return "device updated successfully";
-            } else {
-                return "invalid value";
+        switch (property.toLowerCase()) {
+            case "status" -> {
+                if (value.equalsIgnoreCase("on")) turnOn();
+                else if (value.equalsIgnoreCase("off")) turnOff();
+                else throw new InvalidException("invalid value");
             }
-        } else if (property.equalsIgnoreCase("temperature")) {
-            try {
-                int t = Integer.parseInt(value);
-                if (t < 10 || t > 30) return "invalid value";
-                this.temperature = t;
-                return "device updated successfully";
-            } catch (NumberFormatException e) {
-                return "invalid value";
+            case "temperature" -> {
+                try {
+                    int val = Integer.parseInt(value);
+                    if (val < 10 || val > 30)
+                        throw new InvalidException("invalid value");
+                    this.temperature = val;
+                } catch (NumberFormatException e) {
+                    throw new InvalidException("invalid value");
+                }
             }
-        } else {
-            return "invalid property";
+            default -> throw new InvalidException("invalid property");
         }
+        return "device updated successfully";
     }
 
     @Override
     public String toString() {
-        String statusStr = isOn ? "on" : "off";
-        return String.format("%s %s %dC %s", name, statusStr, temperature, protocol.name());
+        return name + " " + (isOn ? "on" : "off") + " " + temperature + "C " + protocol;
     }
 }

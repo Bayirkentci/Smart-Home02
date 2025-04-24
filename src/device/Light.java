@@ -1,4 +1,5 @@
 package device;
+import exceptions.*;
 
 public class Light extends SmartDevice {
     private int brightness;
@@ -10,33 +11,29 @@ public class Light extends SmartDevice {
 
     @Override
     public String setProperty(String property, String value) {
-        if (property.equalsIgnoreCase("status")) {
-            if (value.equalsIgnoreCase("on")) {
-                turnOn();
-                return "device updated successfully";
-            } else if (value.equalsIgnoreCase("off")) {
-                turnOff();
-                return "device updated successfully";
-            } else {
-                return "invalid value";
+        switch (property.toLowerCase()) {
+            case "status" -> {
+                if (value.equalsIgnoreCase("on")) turnOn();
+                else if (value.equalsIgnoreCase("off")) turnOff();
+                else throw new InvalidException("invalid value");
             }
-        } else if (property.equalsIgnoreCase("brightness")) {
-            try {
-                int b = Integer.parseInt(value);
-                if (b < 0 || b > 100) return "invalid value";
-                this.brightness = b;
-                return "device updated successfully";
-            } catch (NumberFormatException e) {
-                return "invalid value";
+            case "brightness" -> {
+                try {
+                    int val = Integer.parseInt(value);
+                    if (val < 0 || val > 100)
+                        throw new InvalidException("invalid value");
+                    this.brightness = val;
+                } catch (NumberFormatException e) {
+                    throw new InvalidException("invalid value");
+                }
             }
-        } else {
-            return "invalid property";
+            default -> throw new InvalidException("invalid property");
         }
+        return "device updated successfully";
     }
 
     @Override
     public String toString() {
-        String statusStr = isOn ? "on" : "off";
-        return String.format("%s %s %d%% %s", name, statusStr, brightness, protocol.name());
+        return name + " " + (isOn ? "on" : "off") + " " + brightness + "% " + protocol;
     }
 }
