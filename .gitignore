@@ -29,3 +29,6 @@ bin/
 .DS_Store
 /.idea/
 /Smart Home.iml
+/src/.idea/
+
+/src/Ten.iml

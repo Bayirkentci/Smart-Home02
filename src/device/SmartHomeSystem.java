@@ -104,7 +104,11 @@ public class SmartHomeSystem {
     }
 
     private boolean isValidTimeFormat(String time) {
-        if (!time.matches("\\d{2}:\\d{2}")) return false;
+        if (time.length() != 5 || time.charAt(2) != ':' ||
+        !Character.isDigit(time.charAt(0)) || !Character.isDigit(time.charAt(1)) ||
+        !Character.isDigit(time.charAt(3)) || !Character.isDigit(time.charAt(4))) {
+            return false;
+        }
         String[] parts = time.split(":");
         int hour = Integer.parseInt(parts[0]);
         int min = Integer.parseInt(parts[1]);

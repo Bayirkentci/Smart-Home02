@@ -1,18 +1,20 @@
 package device;
 
-public class Rule {
-    private final String deviceName;
-    private final String time; // در فرمت HH:MM
-    private final String action; // "on" یا "off"
+import java.util.Objects;
 
-    public Rule(String deviceName, String time, String action) {
-        this.deviceName = deviceName;
+public class Rule {
+    private String name;
+    private String time;
+    private String action;
+
+    public Rule(String name, String time, String action) {
+        this.name = name;
         this.time = time;
-        this.action = action.toLowerCase();
+        this.action = action;
     }
 
-    public String getDeviceName() {
-        return deviceName;
+    public String getName() {
+        return name;
     }
 
     public String getTime() {
@@ -24,7 +26,15 @@ public class Rule {
     }
 
     @Override
-    public String toString() {
-        return deviceName + " " + time + " " + action;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Rule rule = (Rule) obj;
+        return name.equals(rule.name) && time.equals(rule.time);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, time);
     }
 }

@@ -31,4 +31,7 @@ public abstract class SmartDevice {
     public Protocol getProtocol() {
         return protocol;
     }
+
+    public void setStatus(String action) {
+    }
 }
